@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "python-docker-job-service-orchestrator"
+version = "1.0.0"
+description = "Flask application that allows for management and monitoring of docker swarm jobs and services"
+authors = ["Alexander Whipp (awhipp)"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+flask = "^2.1.2"
+docker = "^5.0.2"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+app = "app:app"
+
+[tool.poetry.extras]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

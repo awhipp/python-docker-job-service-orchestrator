@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Long Running Services</title>
+</head>
+<body>
+	<h1>Long Running Services</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>Service Name</th>
+				<th>Image</th>
+				<th>Replicas</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for service in services %}
+			<tr>
+				<td>{{ service.name }}</td>
+				<td>{{ service.attrs.Image }}</td>
+				<td>{{ service.attrs.Spec.Mode.Replicated.Replicas }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</body>
+</html>
