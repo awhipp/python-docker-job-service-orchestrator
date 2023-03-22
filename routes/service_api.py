@@ -2,6 +2,8 @@
 Service API
 '''
 
+import re
+from uuid import uuid4
 from flask import Blueprint, jsonify, request
 from services.docker_service import DockerService
 
@@ -14,23 +16,28 @@ def add_service():
     '''
     Adds a long-running service from a container image
     '''
-    service_name = request.json['service_name']
-    image = request.json['image']
+    service_name = " ".join(request.json['service_name'].strip().split())
+    service_name = re.sub(r'[^a-zA-Z0-9]', '_', service_name)
+    service_name = f"{service_name}-{str(uuid4())[:8]}"
+    image = request.json['image'].strip() # Image Name or Image ID
+
+    print(f"Adding service: [{service_name}] from image: [{image}]")
+
     # create service
     service = client.services.create(image, name=service_name)
-    return jsonify({'message': 'Service created successfully', 'service_id': service.id}), 201
+    return jsonify({'message': 'Service created successfully', 'service_name': service.name}), 201
 
 
-@bp.route('/scale_service', methods=['POST'])
+@bp.route('/scale_service', methods=['PUT'])
 def scale_service():
     '''
     Scales a long-running service based on service_id
     '''
     service_name = request.json['service_name']
-    replicas = request.json['replicas']
+    replicas = int(request.json['replicas'])
     service = client.services.list(filters={'name': service_name})[0]
     service.scale(replicas=replicas)
-    return jsonify({'message': 'Service scaled successfully', 'service_name': service_name}), 200
+    return jsonify({'message': 'Service scaled successfully', 'service_name': service_name, 'replicas': replicas}), 200
 
 
 @bp.route('/remove_service', methods=['POST'])
@@ -39,20 +46,7 @@ def remove_service():
     Removes a long-running service based on service name
     '''
     service_name = request.json['service_name']
+    print(service_name)
     service = client.services.list(filters={'name': service_name})[0]
     service.remove()
     return jsonify({'message': 'Service removed successfully', 'service_name': service_name}), 200
-
-
-@bp.route('/monitor_service', methods=['GET'])
-def monitor_service():
-    '''
-    Monitors the state of a long-running service based on service_id
-    '''
-    service_name = request.args.get('service_name')
-    service = client.services.list(filters={'name': service_name})[0]
-    service_tasks = service.tasks()
-    task_states = []
-    for task in service_tasks:
-        task_states.append({'id': task.id, 'state': task.status['State']})
-    return jsonify({'service_name': service_name, 'tasks': task_states}), 200

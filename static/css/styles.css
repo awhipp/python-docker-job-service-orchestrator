@@ -1,0 +1,62 @@
+/**
+General Styling
+**/
+
+body {
+	background-color: white;
+}
+
+h1 {
+	color: black;
+}
+
+.main {
+    margin: 1em auto;
+}
+
+.form-section {
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 1em;
+}
+
+
+/**
+Table Styling
+**/
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+td {
+    border-bottom: 1px solid #ddd;
+    padding: 1rem;
+}
+
+tr:hover td {
+    background-color: #ddd;
+}
+
+tr.disabled {
+    background-color: #eee;
+}
+
+/**
+Default Form Styling
+**/
+
+form {
+    margin: 1em auto;
+    max-width: 400px;
+}

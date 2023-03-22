@@ -9,14 +9,14 @@ class DockerService:
     @staticmethod
     def getInstance():
         """ Static access method. """
-        if DockerService.__instance == None:
+        if DockerService.__instance is None:
             DockerService()
         return DockerService.__instance
 
     def __init__(self):
         """ Virtually private constructor. """
-        if DockerService.__instance != None:
-            raise Exception("This class is a singleton!")
+        if DockerService.__instance is not None:
+            raise ValueError("This class is a singleton!")
         else:
             DockerService.__instance = self
             self.client = docker.from_env()

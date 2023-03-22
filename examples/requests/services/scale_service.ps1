@@ -3,7 +3,7 @@ $body = @{
     replicas = 3
 } | ConvertTo-Json
 
-Invoke-RestMethod -Method Post `
+Invoke-RestMethod -Method Put `
                   -Uri "http://localhost:5000/scale_service" `
                   -ContentType "application/json" `
                   -Body $body
