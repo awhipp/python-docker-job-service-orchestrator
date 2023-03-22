@@ -4,6 +4,14 @@
 
 This is a simple Flask application that allows you to run jobs and services on a Docker Swarm cluster. It is a simple wrapper around the Docker API.
 
+### Architecture Diagram
+
+![Architecture Diagram](/architecture/diagram.png?raw=true "Architecture Diagram")
+
+### Work in Progress
+
+![Work in Progress](/architecture/work-in-progress.png?raw=true "Work in Progress")
+
 ## Installation
 
 ### Requirements
@@ -31,3 +39,18 @@ Jobs are one-off tasks that are run on the Docker Swarm cluster. They are not pe
 #### Services
 
 Services are persistent tasks that are run on the Docker Swarm cluster. They are meant to be run continuously and replicated if needed.
+
+## Future State
+
+### Near Term
+
+* Scheduled Jobs (One-Off and Recurring)
+* Scaling replicas based on statistics
+* Starting jobs and services with additional configuration
+
+### Way Future State
+
+* Adding jobs and services through a UI (ie: Upload a python script and requirements file as a job or service)
+* Kubernetes Support
+* Authentication & Authorization
+* Role Based Management

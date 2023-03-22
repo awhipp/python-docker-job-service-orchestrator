@@ -8,6 +8,7 @@ authors = ["Alexander Whipp (awhipp)"]
 python = "^3.8"
 flask = "^2.1.2"
 docker = "^5.0.2"
+python-dotenv = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 
