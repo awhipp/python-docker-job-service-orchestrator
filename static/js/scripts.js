@@ -1,3 +1,39 @@
+// TODO - Separate into multiple files
+
+/**
+ * MISC RELATED
+ */
+
+$(document).ready(function() {
+    $('#action-list .nav-item').click(function(e) {
+      e.preventDefault();
+      $("#action-list .nav-item").removeClass("active");
+      $("#action-list .nav-item .nav-link").removeClass("active");
+      $($(this).children()[0]).addClass('active');
+
+      $(".tab-pane").removeClass("active");
+      $($(this.children[0]).attr('href')).addClass("active");
+    });
+  });
+  
+
+function replace_fa_icon(element, target_icon, replacement_icon, should_spin=false) {
+    if (element.classList.contains(target_icon)) {
+        element.classList.remove(target_icon);
+        element.classList.add(replacement_icon);
+        if (should_spin) {
+            element.classList.add("fa-spin");
+        }
+    } else {
+        element.children[0].classList.remove(target_icon);
+        element.children[0].classList.add(replacement_icon);
+        if (should_spin) {
+            element.children[0].classList.add("fa-spin");
+        }
+    }
+}
+
+
 /***
  * JOBS RELATED
  */
@@ -28,15 +64,7 @@ $("#add_job_form").on("submit", function(){
 
 // Runs job again based on image_id and job_name
 function run_job(job_name, image_id) {
-    if (window.event.target.classList.contains("fa-redo")) {
-        window.event.target.classList.remove("fa-redo");
-        window.event.target.classList.add("fa-spinner");
-        window.event.target.classList.add("fa-spin");
-    } else {
-        window.event.target.children[0].classList.remove("fa-redo");
-        window.event.target.children[0].classList.add("fa-spinner");
-        window.event.target.children[0].classList.add("fa-spin");
-    }
+    replace_fa_icon(window.event.target, "fa-redo", "fa-spinner", true);
     var url = '/run_job';
     var data = {
         'job_name': job_name.substring(0, job_name.length-9), // Remove last 9 characters from the job name
@@ -57,15 +85,7 @@ function run_job(job_name, image_id) {
 
 // Removes job based on job_name
 function remove_job(job_name, retry_as_service=true) {
-    if (window.event.target.classList.contains("fa-trash")) {
-        window.event.target.classList.remove("fa-trash");
-        window.event.target.classList.add("fa-spinner");
-        window.event.target.classList.add("fa-spin");
-    } else {
-        window.event.target.children[0].classList.remove("fa-trash");
-        window.event.target.children[0].classList.add("fa-spinner");
-        window.event.target.children[0].classList.add("fa-spin");
-    }
+    replace_fa_icon(window.event.target, "fa-trash", "fa-spinner", true);
     const thiz = this;
     var url = '/remove_job';
     var data = {
@@ -142,15 +162,7 @@ function update_replicas(service_name, replicas) {
 }
 
 function remove_service(service_name, retry_as_job=true) {
-    if (window.event.target.classList.contains("fa-trash")) {
-        window.event.target.classList.remove("fa-trash");
-        window.event.target.classList.add("fa-spinner");
-        window.event.target.classList.add("fa-spin");
-    } else {
-        window.event.target.children[0].classList.remove("fa-trash");
-        window.event.target.children[0].classList.add("fa-spinner");
-        window.event.target.children[0].classList.add("fa-spin");
-    }
+    replace_fa_icon(window.event.target, "fa-trash", "fa-spinner", true);
     const thiz = this;
     var url = '/remove_service';
     var data = {
@@ -176,3 +188,55 @@ function remove_service(service_name, retry_as_job=true) {
         }
     });
 }
+
+/**
+ * IMAGES RELATED
+ */
+
+// Add image from form data
+$("#add_image_form").on("submit", function(){
+    // Get form data from HTML form
+    var url = '/add_image';
+    var data = {
+        'image_name': $("#add_image_name").val(),
+        'image_version': $("#add_image_version").val() || "",
+    };
+
+    console.log(data)
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (data) {
+            window.alert(`Image ${data.image} has been added.`);
+            window.location.reload();
+        }
+    });
+    return false;
+});
+
+// Removes image from form data
+$("#remove_image_form").on("submit", function(){
+    // Get form data from HTML form
+    var url = '/remove_image';
+    var data = {
+        'image_name': $("#remove_image_name").val()
+    };
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (data) {
+            window.alert(data.message);
+            window.location.reload();
+        },
+        error: function (data) {
+            window.alert(data.responseJSON.message);
+        }
+    });
+    return false;
+});

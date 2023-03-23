@@ -9,6 +9,7 @@ from services.docker_service import DockerService
 
 from routes.job_api import bp as job_api
 from routes.service_api import bp as service_api
+from routes.image_api import bp as image_api
 
 client = DockerService.getInstance().client
 
@@ -16,6 +17,7 @@ app = Flask(__name__)
 
 app.register_blueprint(service_api)
 app.register_blueprint(job_api)
+app.register_blueprint(image_api)
 
 @app.route('/')
 def index():
@@ -46,8 +48,11 @@ def index():
         job.runTime = runTime
         job.attrs['State']['StartedAt'] = job.attrs['State']['StartedAt'].split('.')[0].replace('T', ' ')
 
+    # get all images
+    images = client.images.list(all=True)
+    
     # render HTML template with service data
-    return render_template('services.html', services=services, jobs=jobs)
+    return render_template('services.html', services=services, jobs=jobs, images=images)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
