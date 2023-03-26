@@ -1,165 +1,340 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
-        <title>Swarm Manager</title>
-    </head>
-    <body>
-        <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="#"><i class="fas fa-spinner"></i> Services &amp; Jobs</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="#services">Services</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="#jobs">Jobs</a>
-                    </li>
-                </ul>
-                </div>
-            </div>
-        </nav>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+    <title>Swarm Manager</title>
+</head>
+<body>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-spinner"></i> Services &amp; Jobs</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#jobs">Jobs</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container main">
+    
+    <div class="row">
         
-        <div class="container main">
-            
-            <div class="row">
-
-                <div class="col-md-6 col-sm-12 form-section">
-                    <!-- Add Service Form -->
-                    <h3> Add a new service </h3>
-                    <form id="add_service_form">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="service_name" name="service_name" placeholder="Service name">
-                        </div>
-                        
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="service_image" name="service_image" placeholder="Image id or name">
-                        </div>
-
-                        <br>
-                        
-                        <button type="submit" class="btn btn-success">Add Service</button>
-                    </form>
-                </div>
-
-                <div class="col-md-6 col-sm-12 form-section">
-                    <!-- Add Job Form -->
-                    <h3> Run a new job </h3>
-                    <form id="add_job_form">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="job_name" name="job_name" placeholder="Job name">
-                        </div>
-                        
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="job_image" name="job_image" placeholder="Image id or name">
-                        </div>
-
-                        <br>
-                        
-                        <button type="submit" class="btn btn-success">Run Job</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="container main">
-            <h1 id="services">Services</h1>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Service Name</th>
-                        <th>Version</th>
-                        <th>Image</th>
-                        <th>Short ID</th>
-                        <th>Created</th>
-                        <th class="text-center">Replicas</th>
-                        <th class="text-center">Remove</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for service in services %}
-                    <tr>
-                        <td>{{ service.name }}</td>
-                        <td>{{ service.version }}</td>
-                        <td>{{ service.attrs.Spec.TaskTemplate.ContainerSpec.Image }}</td>
-                        <td>{{ service.short_id }}</td>
-                        <td>{{ service.attrs.CreatedAt }}</td>
-                        <td class="text-center">
-                            <select id="replicas" name="replicas" onchange="update_replicas('{{service.name}}', this.value)">
-                                {% for i in range(0, 99) %}
-                                <option value="{{ i }}" {% if i == service.attrs.Spec.Mode.Replicated.Replicas %} selected {% endif %}>{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td class="text-center"><button onclick="remove_service('{{service.name}}')"><i class="fas fa-trash"></i></button></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            
-            <h1 id="jobs">Jobs</h1>        
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Job Name</th>
-                        <th>Image Name</th>
-                        <th>Short ID</th>
-                        <th>Created</th>
-                        <th>Uptime/Runtime</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Remove</th>
-                        <th class="text-center">Re-run</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for job in jobs %}
-                    <!-- Row with all of the docker container information -->
-                    <!-- Skip Service Containers if com.docker.swarm.node.id is defined -->
-                    {% if job.attrs.Config.Labels['com.docker.swarm.service.name'] is not defined %}
-                    <tr {% if job.status == 'exited' %} class="disabled" {% endif %}>
-                        <td>{{ job.name }}</td>
-                        <td>{{ job.image.attrs.RepoTags[0] }}</td>
-                        <td>{{ job.short_id }}</td>
-                        <td>{{ job.attrs.State.StartedAt }}</td>
-                        <td class="text-center">{{ job.runTime }}</td>
-                        <td class="text-center">{{ job.status }}</td>
-                        <td class="text-center"><button onclick="remove_job('{{job.name}}')"><i class="fas fa-trash"></i></button></td>
-                        {% if job.status == 'exited' %}
-                        <td class="text-center"><button onclick="run_job('{{job.name}}', '{{job.attrs.Image}}')"><i class="fas fa-redo"></i></button></td>
-                        {% else %} 
-                        <td></td>
+        <ul class="nav nav-tabs" id="action-list" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#service_tab" role="tab" aria-controls="service_tab">Start a Service</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#job_tab" role="tab" aria-controls="job_tab">Run a Job</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#scheduled_job_tab" role="tab" aria-controls="scheduled_job_tab">Scheduled Job</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#recurring_job_tab" role="tab" aria-controls="recurring_job_tab">Recurring Job</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#add_image" role="tab" aria-controls="add_image">Add Container Image</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#remove_image" role="tab" aria-controls="remove_image">Remove Container Image</a>
+            </li>
+        </ul>
+        
+        <div class="tab-content">
+            <div class="tab-pane active" id="service_tab" role="tabpanel" aria-labelledby="service_tab-tab">
+                <form id="add_service_form">
+                    <p>
+                        Kicks off a long-running service on the swarm. This service can be replicated across multiple nodes.
+                    </p>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="service_name" name="service_name" placeholder="Service name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <select class="form-select" id="service_image">
+                        {% for image in images %}
+                        <!-- Only show if RepoTags has length -->
+                        {% if image.attrs.RepoTags|length > 0 %}
+                        <option value="{{ image.attrs.Id }}">{{ image.attrs.RepoTags[0] }}</option>
                         {% endif %}
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </body>
-    <!-- Link to the css file -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+                        {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <br>
+                    
+                    <button type="submit" class="btn btn-success">Start Service Now</button>
+                </form>
+            </div>
+            <div class="tab-pane" id="job_tab" role="tabpanel" aria-labelledby="job_tab-tab">
+                <form id="add_job_form">
+                    <p>
+                        Kicks off a one-off job on the swarm. This job will run on a single node.
+                    </p>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="job_name" name="job_name" placeholder="Job name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <select class="form-select" id="job_image">
+                        {% for image in images %}
+                        <!-- Only show if RepoTags has length -->
+                        {% if image.attrs.RepoTags|length > 0 %}
+                        <option value="{{ image.attrs.Id }}">{{ image.attrs.RepoTags[0] }}</option>
+                        {% endif %}
+                        {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <br>
+                    
+                    <button type="submit" class="btn btn-success">Run Job Now</button>
+                </form>
+            </div>
+            <div class="tab-pane" id="scheduled_job_tab" role="tabpanel" aria-labelledby="scheduled_job_tab-tab">
+                <form id="scheduled_job_form">
+                    <p>
+                        Kicks off a one-off job on the swarm. This job will run on a single node at the specified date and time.
+                    </p>
 
-    <!-- Link to JQuery CDN -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.min.js" integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- Link to the core javascript file -->
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+                    <div class="form-group">
+                        <label for="once-date">Date:</label>
+                        <input type="date" class="form-control" id="once-date" name="once-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="once-time">Time:</label>
+                        <input type="time" class="form-control" id="once-time" name="once-time">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="scheduled_job" name="scheduled_job" placeholder="Job name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <select class="form-select" id="scheduled_image">
+                        {% for image in images %}
+                        <!-- Only show if RepoTags has length -->
+                        {% if image.attrs.RepoTags|length > 0 %}
+                        <option value="{{ image.attrs.Id }}">{{ image.attrs.RepoTags[0] }}</option>
+                        {% endif %}
+                        {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <br>
+
+                    <button type="submit" class="btn btn-success">Schedule Job</button>
+                </form>
+            </div>
+            <div class="tab-pane" id="recurring_job_tab" role="tabpanel" aria-labelledby="recurring_job_tab-tab">
+                <form id="recurring_job">
+                    <p>
+                        Kicks off a one-off job on the swarm. This job will run on a single node at the specified recurring interval.
+                    </p>
+                    <p>
+                        Cron expressions are used to specify the interval. For example, to run a job every 5 minutes, use the expression <code>*/5 * * * *</code>.
+                    </p>
+                    <div class="form-group">
+                        <label for="cron-string">Cron Expression</label>
+                        <input type="text" class="form-control" id="cron_string" name="cron_string" placeholder="minute hour day-of-month month day-of-week">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="recurring_job" name="recurring_job" placeholder="Job name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <select class="form-select" id="recurring_image">
+                        {% for image in images %}
+                        <!-- Only show if RepoTags has length -->
+                        {% if image.attrs.RepoTags|length > 0 %}
+                        <option value="{{ image.attrs.Id }}">{{ image.attrs.RepoTags[0] }}</option>
+                        {% endif %}
+                        {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <br>
+
+                    <button type="submit" class="btn btn-success">Setup Recurring Job</button>
+                </form>
+            </div>
+            <div class="tab-pane" id="add_image" role="tabpanel" aria-labelledby="add_image-tab">
+                <form id="add_image_form">
+                    <p>
+                        Pull an image and its version from the repository for later use.
+                    </p>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="add_image_name" name="add_image_name" placeholder="Image Name">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="add_image_version" name="add_image_version" placeholder="Image Version">
+                    </div>
+                    
+                    <br>
+
+                    <button type="submit" class="btn btn-success">Add Image</button>
+                </form>
+            </div>
+            <div class="tab-pane" id="remove_image" role="tabpanel" aria-labelledby="remove_image-tab">
+                <form id="remove_image_form">
+                    <p>
+                        Remove an image and its version from the repository.
+                    </p>
+
+                    <div class="form-group">
+                        <select class="form-select" id="remove_image_name">
+                        {% for image in images %}
+                        <!-- Only show if RepoTags has length -->
+                        {% if image.attrs.RepoTags|length > 0 %}
+                        <option value="{{ image.attrs.Id }}">{{ image.attrs.RepoTags[0] }}</option>
+                        {% endif %}
+                        {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <br>
+
+                    <button type="submit" class="btn btn-success">Remove Image</button>
+                </form>
+            </div>
+    </div>
+    
+    
+</div>
+</div>
+
+<div class="container main">
+    <h1 id="services">Services</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Service Name</th>
+                <th>Version</th>
+                <th>Image</th>
+                <th>Short ID</th>
+                <th>Created</th>
+                <th class="text-center">Replicas</th>
+                <th class="text-center">Remove</th>
+                <th class="text-center">Logs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>{{ service.name }}</td>
+                <td>{{ service.version }}</td>
+                <td>{{ service.attrs.Spec.TaskTemplate.ContainerSpec.Image }}</td>
+                <td>{{ service.short_id }}</td>
+                <td>{{ service.attrs.CreatedAt }}</td>
+                <td class="text-center">
+                    <select id="replicas" name="replicas" onchange="update_replicas('{{service.name}}', this.value)">
+                        {% for i in range(0, 99) %}
+                        <option value="{{ i }}" {% if i == service.attrs.Spec.Mode.Replicated.Replicas %} selected {% endif %}>{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td class="text-center"><button onclick="remove_service('{{service.name}}')"><i class="fas fa-trash"></i></button></td>
+                <td class="text-center"><button onclick="get_service_logs('{{service.name}}')"><i class="fas fa-file-alt"></i></button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h1 id="jobs">Jobs</h1>        
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Job Name</th>
+                <th>Image Name</th>
+                <th>Short ID</th>
+                <th>Created</th>
+                <th>Uptime/Runtime</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Remove</th>
+                <th class="text-center">Re-run</th>
+                <th class="text-center">Logs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in jobs %}
+            <!-- Row with all of the docker container information -->
+            <!-- Skip Service Containers if com.docker.swarm.node.id is defined -->
+            {% if job.attrs.Config.Labels['com.docker.swarm.service.name'] is not defined %}
+            <tr {% if job.status == 'exited' %} class="disabled" {% endif %}>
+                <td>{{ job.name }}</td>
+                <td>{{ job.image.attrs.RepoTags[0] }}</td>
+                <td>{{ job.short_id }}</td>
+                <td>{{ job.attrs.State.StartedAt }}</td>
+                <td class="text-center">{{ job.runTime }}</td>
+                <td class="text-center">{{ job.status }}</td>
+                <td class="text-center"><button onclick="remove_job('{{job.name}}')"><i class="fas fa-trash"></i></button></td>
+                {% if job.status == 'exited' %}
+                <td class="text-center"><button onclick="run_job('{{job.name}}', '{{job.attrs.Image}}')"><i class="fas fa-redo"></i></button></td>
+                <td><button onclick="get_job_logs('{{job.name}}')"><i class="fas fa-file-alt"></i></button></td>
+                {% else %}
+                <td></td>
+                <td><button onclick="get_job_logs('{{job.name}}')"><i class="fas fa-file-alt"></i></button></td>
+                {% endif %}
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="log_modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="close close_log_modal" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Modal body text goes here.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="refresh_logs()"><i class="fas fa-redo"></i></button>
+          <button type="button" class="btn btn-secondary close_log_modal" data-dismiss="log_modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+<!-- Link to the css file -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/styles.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<!-- Link to JQuery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.min.js" integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- Link to the core javascript file -->
+<script src="{{ url_for('static', path='js/scripts.js') }}"></script>
 </html>

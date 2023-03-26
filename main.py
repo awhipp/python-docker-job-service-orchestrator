@@ -1,24 +1,32 @@
 '''
 Flask Application that provides a REST API for the Swarm Orchestrator
 '''
+import uvicorn
 import datetime
 
-from flask import Flask, render_template
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 from services.docker_service import DockerService
 
 from routes.job_api import bp as job_api
 from routes.service_api import bp as service_api
+from routes.image_api import bp as image_api
 
 client = DockerService.getInstance().client
 
-app = Flask(__name__)
+app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
-app.register_blueprint(service_api)
-app.register_blueprint(job_api)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-@app.route('/')
-def index():
+app.mount('/services/', service_api)
+app.mount('/jobs/', job_api)
+app.mount('/images/', image_api)
+
+@app.get('/')
+async def index(request: Request):
     '''
     Renders the index page
     '''
@@ -46,8 +54,12 @@ def index():
         job.runTime = runTime
         job.attrs['State']['StartedAt'] = job.attrs['State']['StartedAt'].split('.')[0].replace('T', ' ')
 
+    # get all images
+    images = client.images.list(all=True)
+    
     # render HTML template with service data
-    return render_template('services.html', services=services, jobs=jobs)
+    print('here')
+    return templates.TemplateResponse("services.html", {'request': request, 'services': services, 'jobs': jobs, 'images': images})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    uvicorn.run("main:app", host="127.0.0.1", port=5000, reload=True)

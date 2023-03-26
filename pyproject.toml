@@ -6,9 +6,11 @@ authors = ["Alexander Whipp (awhipp)"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-flask = "^2.1.2"
 docker = "^5.0.2"
 python-dotenv = "^1.0.0"
+fastapi = "^0.95.0"
+uvicorn = "^0.21.1"
+jinja2 = "^3.1.2"
 
 [tool.poetry.dev-dependencies]
 

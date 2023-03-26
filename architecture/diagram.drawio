@@ -4,44 +4,48 @@
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;" vertex="1" parent="1">
-                    <mxGeometry x="160" y="140" width="570" height="330" as="geometry"/>
+                <mxCell id="3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="140" width="570" height="330" as="geometry"/>
                 </mxCell>
-                <mxCell id="18" value="" style="edgeStyle=none;shape=connector;rounded=1;html=1;labelBackgroundColor=default;strokeColor=#000000;fontFamily=Helvetica;fontSize=11;fontColor=default;endArrow=classic;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="4" target="7">
+                <mxCell id="18" value="" style="edgeStyle=none;shape=connector;rounded=1;html=1;labelBackgroundColor=default;strokeColor=#000000;fontFamily=Helvetica;fontSize=11;fontColor=default;endArrow=classic;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="4" target="7" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="19" value="" style="edgeStyle=none;shape=connector;rounded=1;html=1;labelBackgroundColor=default;strokeColor=#000000;fontFamily=Helvetica;fontSize=11;fontColor=default;endArrow=classic;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="4" target="9">
+                <mxCell id="19" value="" style="edgeStyle=none;shape=connector;rounded=1;html=1;labelBackgroundColor=default;strokeColor=#000000;fontFamily=Helvetica;fontSize=11;fontColor=default;endArrow=classic;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="4" target="9" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="20" value="" style="edgeStyle=none;shape=connector;rounded=1;html=1;labelBackgroundColor=default;strokeColor=#000000;fontFamily=Helvetica;fontSize=11;fontColor=default;endArrow=classic;" edge="1" parent="1" source="4" target="8">
+                <mxCell id="20" value="" style="edgeStyle=none;shape=connector;rounded=1;html=1;labelBackgroundColor=default;strokeColor=#000000;fontFamily=Helvetica;fontSize=11;fontColor=default;endArrow=classic;" parent="1" source="4" target="8" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="4" value="" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Docker.svg;fillColor=#FFFFFF;" vertex="1" parent="1">
+                <mxCell id="4" value="" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Docker.svg;fillColor=#FFFFFF;" parent="1" vertex="1">
                     <mxGeometry x="490" y="234.75" width="73.78" height="60.5" as="geometry"/>
                 </mxCell>
-                <mxCell id="7" value="" style="image;html=1;image=img/lib/clip_art/computers/Server_Tower_128x128.png;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1">
+                <mxCell id="7" value="" style="image;html=1;image=img/lib/clip_art/computers/Server_Tower_128x128.png;strokeColor=#000000;fillColor=#FFFFFF;" parent="1" vertex="1">
                     <mxGeometry x="620" y="170" width="60" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="8" value="" style="image;html=1;image=img/lib/clip_art/computers/Server_Tower_128x128.png;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1">
+                <mxCell id="8" value="" style="image;html=1;image=img/lib/clip_art/computers/Server_Tower_128x128.png;strokeColor=#000000;fillColor=#FFFFFF;" parent="1" vertex="1">
                     <mxGeometry x="620" y="240" width="60" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="9" value="" style="image;html=1;image=img/lib/clip_art/computers/Server_Tower_128x128.png;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1">
+                <mxCell id="9" value="" style="image;html=1;image=img/lib/clip_art/computers/Server_Tower_128x128.png;strokeColor=#000000;fillColor=#FFFFFF;" parent="1" vertex="1">
                     <mxGeometry x="620" y="310" width="60" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="17" value="" style="edgeStyle=none;shape=connector;rounded=1;html=1;labelBackgroundColor=default;strokeColor=#000000;fontFamily=Helvetica;fontSize=11;fontColor=default;endArrow=classic;" edge="1" parent="1" source="10" target="4">
-                    <mxGeometry relative="1" as="geometry"/>
+                <mxCell id="17" value="" style="edgeStyle=none;shape=connector;rounded=1;html=1;labelBackgroundColor=default;strokeColor=#000000;fontFamily=Helvetica;fontSize=11;fontColor=default;endArrow=classic;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" target="4" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="403.94000000000005" y="265.75" as="sourcePoint"/>
+                    </mxGeometry>
                 </mxCell>
-                <mxCell id="10" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://logos-world.net/wp-content/uploads/2021/10/Python-Symbol.png;" vertex="1" parent="1">
-                    <mxGeometry x="310" y="228.5" width="129.56" height="73" as="geometry"/>
+                <mxCell id="15" value="" style="edgeStyle=none;html=1;strokeColor=#000000;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="14" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="340" y="265.75" as="targetPoint"/>
+                    </mxGeometry>
                 </mxCell>
-                <mxCell id="15" value="" style="edgeStyle=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="14" target="10">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="14" value="" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/general/Browser.svg;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1">
+                <mxCell id="14" value="" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/general/Browser.svg;strokeColor=#000000;fillColor=#FFFFFF;" parent="1" vertex="1">
                     <mxGeometry x="190" y="240" width="65" height="52" as="geometry"/>
                 </mxCell>
-                <mxCell id="21" value="User connects to Flask App's rendered UI (Jinja 2 Templates)&lt;br&gt;&lt;br&gt;Flask app sends commands via Docker SDK to a preconfigured Swarm.&lt;br&gt;&lt;br&gt;Docker Swarm handles the management of jobs and services based on user requests." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=11;fontColor=#000000;" vertex="1" parent="1">
+                <mxCell id="21" value="User connects to Flask App's rendered UI (Jinja 2 Templates)&lt;br&gt;&lt;br&gt;Flask app sends commands via Docker SDK to a preconfigured Swarm.&lt;br&gt;&lt;br&gt;Docker Swarm handles the management of jobs and services based on user requests." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=11;fontColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="160" y="350" width="475.22" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="Python Application" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.android;fillColor=#FFD44F;gradientColor=none;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="340" y="220" width="73.5" height="84" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
