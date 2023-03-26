@@ -27,7 +27,7 @@ This is a simple Flask application that allows you to run jobs and services on a
 2. Initialize docker swarm with `docker swarm init`
 3. Run `poetry install` to install the dependencies
 4. Run `poetry shell` to activate the virtual environment
-5. Run `python app.py` to start the application
+5. Run `python main.py` to start the application
 6. Execute API calls based on what jobs and services you want to run
 
 ## API

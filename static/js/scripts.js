@@ -18,7 +18,13 @@ $(document).ready(function() {
   
 
 function replace_fa_icon(element, target_icon, replacement_icon, should_spin=false) {
-    if (element.classList.contains(target_icon)) {
+    if (target_icon === 'text') {
+        if (should_spin) {
+            $(element).html(`<i class="fas ${replacement_icon} fa-spin"></i>`)
+        } else {
+            $(element).html(`<i class="fas ${replacement_icon}"></i>`)
+        }
+    }else if (element.classList.contains(target_icon)) {
         element.classList.remove(target_icon);
         element.classList.add(replacement_icon);
         if (should_spin) {
@@ -44,9 +50,9 @@ function replace_fa_icon(element, target_icon, replacement_icon, should_spin=fal
 
 // Add job from form data
 $("#add_job_form").on("submit", function(){
-    // Get form data from HTML form
+    replace_fa_icon($("#add_job_form button[type='submit']"), "text", "fa-spinner", true);
     
-    var url = '/run_job';
+    var url = '/jobs/run';
     var data = {
         'job_name': $("#job_name").val(),
         'image': $("#job_image").val(),
@@ -69,7 +75,7 @@ $("#add_job_form").on("submit", function(){
 // Runs job again based on image_id and job_name
 function run_job(job_name, image_id) {
     replace_fa_icon(window.event.target, "fa-redo", "fa-spinner", true);
-    var url = '/run_job';
+    var url = '/jobs/run';
     var data = {
         'job_name': job_name.substring(0, job_name.length-9), // Remove last 9 characters from the job name
         'image': image_id
@@ -91,7 +97,7 @@ function run_job(job_name, image_id) {
 function remove_job(job_name, retry_as_service=true) {
     replace_fa_icon(window.event.target, "fa-trash", "fa-spinner", true);
     const thiz = this;
-    var url = '/remove_job';
+    var url = '/jobs/remove';
     var data = {
         'job_name': job_name
     };
@@ -119,7 +125,7 @@ function remove_job(job_name, retry_as_service=true) {
 function get_job_logs(job_name) {
     let eventTarget = window.event.target;
     replace_fa_icon(eventTarget, "fa-file-alt", "fa-spinner", true);
-    var url = '/get_job_logs';
+    var url = '/jobs/logs';
     var data = {
         'job_name': job_name
     };
@@ -142,14 +148,13 @@ function get_job_logs(job_name) {
 
 // Add job from form data
 $("#add_service_form").on("submit", function(){
-    // Get form data from HTML form
-    var url = '/add_service';
+    replace_fa_icon($("#add_service_form button[type='submit']"), "text", "fa-spinner", true);
+
+    var url = '/services/add';
     var data = {
         'service_name': $("#service_name").val(),
         'image': $("#service_image").val(),
     };
-
-    console.log(data);
 
     $.ajax({
         url: url,
@@ -166,7 +171,7 @@ $("#add_service_form").on("submit", function(){
 
 // Updates a service's replicas
 function update_replicas(service_name, replicas) {
-    var url = '/scale_service';
+    var url = '/services/scale';
     var data = {
         'service_name': service_name,
         'replicas': replicas
@@ -187,7 +192,7 @@ function update_replicas(service_name, replicas) {
 function remove_service(service_name, retry_as_job=true) {
     replace_fa_icon(window.event.target, "fa-trash", "fa-spinner", true);
     const thiz = this;
-    var url = '/remove_service';
+    var url = '/services/remove';
     var data = {
         'service_name': service_name
     };
@@ -215,7 +220,7 @@ function remove_service(service_name, retry_as_job=true) {
 function get_service_logs(service_name) {
     let eventTarget = window.event.target;
     replace_fa_icon(eventTarget, "fa-file-alt", "fa-spinner", true);
-    var url = '/get_service_logs';
+    var url = '/services/logs/';
     var data = {
         'service_name': service_name
     };
@@ -238,14 +243,13 @@ function get_service_logs(service_name) {
 
 // Add image from form data
 $("#add_image_form").on("submit", function(){
-    // Get form data from HTML form
-    var url = '/add_image';
+    replace_fa_icon($("#add_image_form button[type='submit']"), "text", "fa-spinner", true);
+
+    var url = '/images/add';
     var data = {
         'image_name': $("#add_image_name").val(),
         'image_version': $("#add_image_version").val() || "",
     };
-
-    console.log(data)
 
     $.ajax({
         url: url,
@@ -262,8 +266,9 @@ $("#add_image_form").on("submit", function(){
 
 // Removes image from form data
 $("#remove_image_form").on("submit", function(){
-    // Get form data from HTML form
-    var url = '/remove_image';
+    replace_fa_icon($("#remove_image_form button[type='submit']"), "text", "fa-spinner", true);
+    
+    var url = '/images/remove';
     var data = {
         'image_name': $("#remove_image_name").val()
     };
@@ -325,13 +330,13 @@ function refresh_logs() {
 
     if (modal_title.includes("Service")) {
         service_name = modal_title.substring(9, modal_title.length-5);
-        route = '/get_service_logs';
+        route = '/services/logs';
         payload = {
             'service_name': service_name
         }
     } else if (modal_title.includes("Job")) {
         job_name = modal_title.substring(5, modal_title.length-5);
-        route = '/get_job_logs';
+        route = '/jobs/logs';
         payload = {
             'job_name': job_name
         }
