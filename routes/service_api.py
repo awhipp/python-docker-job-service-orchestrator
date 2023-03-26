@@ -39,7 +39,6 @@ def scale_service():
     service.scale(replicas=replicas)
     return jsonify({'message': 'Service scaled successfully', 'service_name': service_name, 'replicas': replicas}), 200
 
-
 @bp.route('/remove_service', methods=['POST'])
 def remove_service():
     '''
@@ -50,3 +49,15 @@ def remove_service():
     service = client.services.list(filters={'name': service_name})[0]
     service.remove()
     return jsonify({'message': 'Service removed successfully', 'service_name': service_name}), 200
+
+# TODO: Use since, until to paginate since last request and append
+@bp.route('/get_service_logs', methods=['POST'])
+def get_service_logs():
+    '''
+    Get logs from a long-running service based on service name
+    '''
+    service_name = request.json['service_name']
+    service = client.services.list(filters={'name': service_name})[0]
+    log_generator = service.logs(since=0, stdout=True, stderr=True)
+    logs = ''.join([log.decode('utf-8') for log in log_generator])
+    return jsonify({'message': 'Service logs retrieved successfully', 'service_name': service_name, 'logs': logs}), 200

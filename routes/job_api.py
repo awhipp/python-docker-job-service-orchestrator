@@ -37,3 +37,16 @@ def remove_job():
     container.stop()
     container.remove(force=True)
     return jsonify({'message': 'Job removed successfully', 'job_name': job_name}), 200
+
+# Get job logs
+# TODO: Use since, until to paginate since last request and append
+@bp.route('/get_job_logs', methods=['POST'])
+def get_job_logs():
+    '''
+    Get logs from a short-lived job/container based on container_id
+    '''
+    job_name = request.json['job_name']
+    container = client.containers.get(job_name)
+    logs = container.logs(tail='all', stdout=True, stderr=True)
+    logs = logs.decode('utf-8')
+    return jsonify({'message': 'Job logs retrieved successfully', 'job_name': job_name, 'logs': logs}), 200

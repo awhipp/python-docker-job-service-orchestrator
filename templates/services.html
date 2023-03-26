@@ -10,6 +10,7 @@
     <title>Swarm Manager</title>
 </head>
 <body>
+    
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -237,6 +238,7 @@
                 <th>Created</th>
                 <th class="text-center">Replicas</th>
                 <th class="text-center">Remove</th>
+                <th class="text-center">Logs</th>
             </tr>
         </thead>
         <tbody>
@@ -255,6 +257,7 @@
                     </select>
                 </td>
                 <td class="text-center"><button onclick="remove_service('{{service.name}}')"><i class="fas fa-trash"></i></button></td>
+                <td class="text-center"><button onclick="get_service_logs('{{service.name}}')"><i class="fas fa-file-alt"></i></button></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -273,6 +276,7 @@
                 <th class="text-center">Status</th>
                 <th class="text-center">Remove</th>
                 <th class="text-center">Re-run</th>
+                <th class="text-center">Logs</th>
             </tr>
         </thead>
         <tbody>
@@ -290,8 +294,10 @@
                 <td class="text-center"><button onclick="remove_job('{{job.name}}')"><i class="fas fa-trash"></i></button></td>
                 {% if job.status == 'exited' %}
                 <td class="text-center"><button onclick="run_job('{{job.name}}', '{{job.attrs.Image}}')"><i class="fas fa-redo"></i></button></td>
-                {% else %} 
+                <td><button onclick="get_job_logs('{{job.name}}')"><i class="fas fa-file-alt"></i></button></td>
+                {% else %}
                 <td></td>
+                <td><button onclick="get_job_logs('{{job.name}}')"><i class="fas fa-file-alt"></i></button></td>
                 {% endif %}
             </tr>
             {% endif %}
@@ -299,6 +305,28 @@
         </tbody>
     </table>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="log_modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="close close_log_modal" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Modal body text goes here.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="refresh_logs()"><i class="fas fa-redo"></i></button>
+          <button type="button" class="btn btn-secondary close_log_modal" data-dismiss="log_modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 <!-- Link to the css file -->
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">

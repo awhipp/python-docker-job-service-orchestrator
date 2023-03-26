@@ -23,12 +23,16 @@ function replace_fa_icon(element, target_icon, replacement_icon, should_spin=fal
         element.classList.add(replacement_icon);
         if (should_spin) {
             element.classList.add("fa-spin");
+        } else {
+            element.classList.remove("fa-spin");
         }
     } else {
         element.children[0].classList.remove(target_icon);
         element.children[0].classList.add(replacement_icon);
         if (should_spin) {
             element.children[0].classList.add("fa-spin");
+        } else {
+            element.children[0].classList.remove("fa-spin");
         }
     }
 }
@@ -112,6 +116,25 @@ function remove_job(job_name, retry_as_service=true) {
     });
 }
 
+function get_job_logs(job_name) {
+    let eventTarget = window.event.target;
+    replace_fa_icon(eventTarget, "fa-file-alt", "fa-spinner", true);
+    var url = '/get_job_logs';
+    var data = {
+        'job_name': job_name
+    };
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (data) {
+            showModal(`Job: ${data.job_name} Logs`, data.logs);
+            replace_fa_icon(eventTarget, "fa-spinner", "fa-file-alt", false);
+        }
+    });
+}
 /***
  * SERVICES RELATED
  */
@@ -189,6 +212,26 @@ function remove_service(service_name, retry_as_job=true) {
     });
 }
 
+function get_service_logs(service_name) {
+    let eventTarget = window.event.target;
+    replace_fa_icon(eventTarget, "fa-file-alt", "fa-spinner", true);
+    var url = '/get_service_logs';
+    var data = {
+        'service_name': service_name
+    };
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (data) {
+            showModal(`Service: ${data.service_name} Logs`, data.logs);
+            replace_fa_icon(eventTarget, "fa-spinner", "fa-file-alt", false);
+        }
+    });
+}
+
 /**
  * IMAGES RELATED
  */
@@ -240,3 +283,76 @@ $("#remove_image_form").on("submit", function(){
     });
     return false;
 });
+
+/**
+ * Open Modal
+ */
+function showModal(title, text) {
+    // Get a reference to the modal element
+    const modal = document.getElementById('log_modal');
+
+    // Get a reference to the modal's title element
+    const modalTitle = modal.querySelector('.modal-title');
+    modalTitle.innerText = title;
+  
+    // Get a reference to the modal's text element
+    const modalText = modal.querySelector('.modal-body p');
+  
+    // Set the text of the modal's text element
+    modalText.innerText = text;
+  
+    // Show the modal
+    $(modal).modal('show')
+
+    $('.close_log_modal').on('click', function() {
+        $(modal).modal('hide');
+    });
+    
+    setTimeout(function() {
+        var maxScrollHeight = $(".modal-body")[0].scrollHeight - $(".modal-body").outerHeight();
+
+        $(".modal-body").scrollTop(maxScrollHeight);
+    }, 500);
+}
+
+function refresh_logs() {
+    let eventTarget = window.event.target;
+    replace_fa_icon(eventTarget, "fa-redo", "fa-spinner", true);
+
+    modal_title = $(".modal .modal-title").text();
+    route = '';
+    payload = {};
+
+    if (modal_title.includes("Service")) {
+        service_name = modal_title.substring(9, modal_title.length-5);
+        route = '/get_service_logs';
+        payload = {
+            'service_name': service_name
+        }
+    } else if (modal_title.includes("Job")) {
+        job_name = modal_title.substring(5, modal_title.length-5);
+        route = '/get_job_logs';
+        payload = {
+            'job_name': job_name
+        }
+    }
+
+    var url = route;
+    var data = payload;
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (data) {
+            if ('job_name' in data) {
+                showModal(`Job: ${data.job_name} Logs`, data.logs);
+            } else if ('service_name' in data) {
+                showModal(`Service: ${data.service_name} Logs`, data.logs);
+            }
+            replace_fa_icon(eventTarget, "fa-spinner", "fa-redo", false);
+        }
+    });
+}
+

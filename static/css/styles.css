@@ -84,3 +84,15 @@ tr:hover td {
 tr.disabled {
     background-color: #eee;
 }
+
+/**
+Modal Styling
+**/
+
+.modal-body {
+    min-height: 100px;
+    max-height: 50vh;
+    min-width: 400px;
+    max-width: 50vw;
+    overflow-y: auto;
+}
