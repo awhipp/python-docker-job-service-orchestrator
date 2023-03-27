@@ -4,6 +4,6 @@ $body = @{
 } | ConvertTo-Json
 
 Invoke-RestMethod -Method Post `
-                  -Uri "http://localhost:5000/run_job" `
+                  -Uri "http://localhost:5000/jobs/run" `
                   -ContentType "application/json" `
                   -Body $body

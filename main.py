@@ -9,12 +9,13 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
 from services.docker_service import DockerService
+from services.scheduler_service import Scheduler
 
 from routes.job_api import bp as job_api
 from routes.service_api import bp as service_api
 from routes.image_api import bp as image_api
 
-client = DockerService.getInstance().client
+client: DockerService = DockerService.getInstance().client
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -58,8 +59,13 @@ async def index(request: Request):
     images = client.images.list(all=True)
     
     # render HTML template with service data
-    print('here')
     return templates.TemplateResponse("services.html", {'request': request, 'services': services, 'jobs': jobs, 'images': images})
 
 if __name__ == '__main__':
-    uvicorn.run("main:app", host="127.0.0.1", port=5000, reload=True)
+
+    # Scheduler start before first request
+    @app.on_event("startup")
+    def startup_event():
+        scheduler: Scheduler = Scheduler.getInstance()
+        
+    uvicorn.run("main:app", host="127.0.0.1", port=5000, reload=True, workers=1)
