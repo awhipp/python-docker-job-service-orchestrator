@@ -14,3 +14,10 @@ class DockerService:
     def __init__(self):
         DockerService.__instance = self
         self.client = docker.from_env()
+    
+    def scale_service(self, service_name: str, replicas: int):
+        '''
+        Scale a service
+        '''
+        service = self.client.services.get(service_name)
+        service.scale(replicas=replicas)
