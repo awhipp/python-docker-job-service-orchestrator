@@ -7,8 +7,10 @@ import re
 from uuid import uuid4
 from fastapi import FastAPI, Request
 from services.docker_service import DockerService
+from services.scheduler_service import AsyncScheduler
 
-client = DockerService.getInstance().client
+client = DockerService().client
+scheduler: AsyncScheduler = AsyncScheduler()
 bp = FastAPI()
 
 @bp.post('/run')

@@ -4,6 +4,6 @@ $body = @{
 } | ConvertTo-Json
 
 Invoke-RestMethod -Method Put `
-                  -Uri "http://localhost:5000/scale_service" `
+                  -Uri "http://localhost:5000/services/scale" `
                   -ContentType "application/json" `
                   -Body $body
