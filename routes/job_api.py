@@ -7,10 +7,10 @@ import re
 from uuid import uuid4
 from fastapi import FastAPI, Request
 from services.docker_service import DockerService
-from services.scheduler_service import Scheduler
+from services.scheduler_service import AsyncScheduler
 
-client = DockerService.getInstance().client
-scheduler: Scheduler = Scheduler.getInstance()
+client = DockerService().client
+scheduler: AsyncScheduler = AsyncScheduler()
 bp = FastAPI()
 
 @bp.post('/run')
@@ -56,14 +56,3 @@ async def get_job_logs(request: Request):
     logs = container.logs(tail='all', stdout=True, stderr=True)
     logs = logs.decode('utf-8')
     return {'message': 'Job logs retrieved successfully', 'job_name': job_name, 'logs': logs}
-
-@bp.post('/schedule')
-async def schedule_job(request: Request):
-    '''
-    Schedules a short-lived job from a container image
-    '''
-    request = await request.json()
-    job_text = request['job_text'].strip()
-    scheduler.schedule_task(print, ['hi', 'there', 'you'])
-
-    

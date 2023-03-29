@@ -7,7 +7,7 @@ from docker.errors import APIError
 from fastapi import FastAPI, Request
 from services.docker_service import DockerService
 
-client = DockerService.getInstance().client
+client = DockerService().client
 bp = FastAPI()
 
 @bp.post('/add')

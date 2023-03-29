@@ -8,7 +8,7 @@ from uuid import uuid4
 from fastapi import FastAPI, Request
 from services.docker_service import DockerService
 
-client = DockerService.getInstance().client
+client = DockerService().client
 bp = FastAPI()
 
 
@@ -49,7 +49,6 @@ async def remove_service(request: Request):
     '''
     request = await request.json()
     service_name = request['service_name']
-    print(service_name)
     service = client.services.list(filters={'name': service_name})[0]
     service.remove()
     return {'message': 'Service removed successfully', 'service_name': service_name}

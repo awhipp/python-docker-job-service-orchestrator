@@ -1,8 +1,8 @@
-# Flask Python Job and Service Orchestrator
+# Python Job and Service Orchestrator
 
 ## Introduction
 
-This is a simple Flask application that allows you to run jobs and services on a Docker Swarm cluster. It is a simple wrapper around the Docker API.
+This is a Fast API application that allows you to run jobs and services on a Docker Swarm cluster by wrapping the Docker API. It allows you to run short-lived jobs or long-running services at a specific time or on a schedule.
 
 ### Architecture Diagram
 
