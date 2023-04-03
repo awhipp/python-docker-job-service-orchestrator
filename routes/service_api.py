@@ -8,7 +8,7 @@ from uuid import uuid4
 from fastapi import FastAPI, Request
 from services.docker_service import DockerService
 
-client = DockerService().client
+docker_service = DockerService()
 bp = FastAPI()
 
 
@@ -23,11 +23,7 @@ async def add_service(request: Request):
     service_name = f"{service_name}-{str(uuid4())[:8]}"
     image = request['image'].strip() # Image Name or Image ID
 
-    print(f"Adding service: [{service_name}] from image: [{image}]")
-
-    # create service
-    service = client.services.create(image, name=service_name)
-    return {'message': 'Service created successfully', 'service_name': service.name}
+    return docker_service.add_service(service_name, image)
 
 
 @bp.put('/scale')
@@ -38,9 +34,7 @@ async def scale_service(request: Request):
     request = await request.json()
     service_name = request['service_name']
     replicas = int(request['replicas'])
-    service = client.services.list(filters={'name': service_name})[0]
-    service.scale(replicas=replicas)
-    return {'message': 'Service scaled successfully', 'service_name': service_name, 'replicas': replicas}
+    return docker_service.scale_service(service_name, replicas)
 
 @bp.post('/remove')
 async def remove_service(request: Request):
@@ -49,9 +43,7 @@ async def remove_service(request: Request):
     '''
     request = await request.json()
     service_name = request['service_name']
-    service = client.services.list(filters={'name': service_name})[0]
-    service.remove()
-    return {'message': 'Service removed successfully', 'service_name': service_name}
+    return docker_service.remove_service(service_name)
 
 # TODO: Use since, until to paginate since last request and append
 @bp.post('/logs')
@@ -61,7 +53,4 @@ async def get_service_logs(request: Request):
     '''
     request = await request.json()
     service_name = request['service_name']
-    service = client.services.list(filters={'name': service_name})[0]
-    log_generator = service.logs(since=0, stdout=True, stderr=True)
-    logs = ''.join([log.decode('utf-8') for log in log_generator])
-    return {'message': 'Service logs retrieved successfully', 'service_name': service_name, 'logs': logs}
+    return docker_service.get_service_logs(service_name)

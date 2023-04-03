@@ -9,7 +9,7 @@ from fastapi import FastAPI, Request
 from services.docker_service import DockerService
 from services.scheduler_service import AsyncScheduler
 
-client = DockerService().client
+docker_service = DockerService()
 scheduler: AsyncScheduler = AsyncScheduler()
 bp = FastAPI()
 
@@ -24,12 +24,7 @@ async def run_job(request: Request):
     job_name = f"{job_name}-{str(uuid4())[:8]}"
     image = request['image'].strip() # Image Name or Image ID
 
-    print(
-        f"Running job: [{job_name}] from image: [{image}]"
-    )
-
-    client.containers.run(image, detach=True, name=job_name)
-    return {'message': 'Job started successfully', 'job_name': job_name}
+    return docker_service.add_job(job_name, image)
 
 @bp.post('/remove')
 async def remove_job(request: Request):
@@ -38,13 +33,10 @@ async def remove_job(request: Request):
     '''
     request = await request.json()
     job_name = request['job_name']
-    container = client.containers.get(job_name)
-    container.stop()
-    container.remove(force=True)
-    return {'message': 'Job removed successfully', 'job_name': job_name}
+
+    return docker_service.remove_job(job_name)
 
 # Get job logs
-# TODO: Use since, until to paginate since last request and append
 @bp.post('/logs')
 async def get_job_logs(request: Request):
     '''
@@ -52,7 +44,4 @@ async def get_job_logs(request: Request):
     '''
     request = await request.json()
     job_name = request['job_name']
-    container = client.containers.get(job_name)
-    logs = container.logs(tail='all', stdout=True, stderr=True)
-    logs = logs.decode('utf-8')
-    return {'message': 'Job logs retrieved successfully', 'job_name': job_name, 'logs': logs}
+    return docker_service.get_job_logs(job_name)
