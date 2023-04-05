@@ -23,7 +23,7 @@ async def recurring_wrapper(scheduler: AsyncScheduler, task_name, cron_string: s
             next_run_time = croniter(cron_string, scheduler.loop.time()).get_next()
             sleep_time = round(max(next_run_time - scheduler.loop.time(), 0), 2)
             await asyncio.sleep(sleep_time)
-            await function(*args, **kwargs)
+            function(*args, **kwargs)
     except Exception as job_exception: # pylint: disable=broad-except
         # TODO - Handle job exceptions
         print(f"[{time.ctime()}] Error in task {task_name}: {job_exception}")
@@ -73,8 +73,8 @@ class AsyncScheduler:
             **kwargs: Keyword arguments to pass to the function
         '''
         # Make function a coroutine if it isn't already
-        if not asyncio.iscoroutinefunction(function):
-            function = asyncio.coroutine(function)
+        # if not asyncio.iscoroutinefunction(function):
+        #     function = asyncio.coroutine(function)
         
         if recurring:
             print(f"[{time.ctime()}] Scheduling task {task_name} to run at {dtime_string} (Recurring = {recurring}).")

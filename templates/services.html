@@ -147,20 +147,16 @@
                 </form>
             </div>
             <div class="tab-pane" id="recurring_job_tab" role="tabpanel" aria-labelledby="recurring_job_tab-tab">
-                <form id="recurring_job">
+                <form id="recurring_job_form">
                     <p>
                         Kicks off a one-off job on the swarm. This job will run on a single node at the specified recurring interval.
                     </p>
                     <p>
                         Cron expressions are used to specify the interval. For example, to run a job every 5 minutes, use the expression <code>*/5 * * * *</code>.
                     </p>
-                    <div class="form-group">
-                        <label for="cron-string">Cron Expression</label>
-                        <input type="text" class="form-control" id="cron_string" name="cron_string" placeholder="minute hour day-of-month month day-of-week">
-                    </div>
 
                     <div class="form-group">
-                        <input type="text" class="form-control" id="recurring_job" name="recurring_job" placeholder="Job name">
+                        <input type="text" class="form-control" id="recurring_task_name" name="recurring_task_name" placeholder="Task name">
                     </div>
                     
                     <div class="form-group">
@@ -172,6 +168,11 @@
                         {% endif %}
                         {% endfor %}
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cron-string">Cron Expression</label>
+                        <input type="text" class="form-control" id="recurring_cron" name="recurring_cron" placeholder="minute hour day-of-month month day-of-week">
                     </div>
                     
                     <br>

@@ -4,6 +4,7 @@ from __future__ import annotations
 from services.docker_service import DockerService
 from services.scheduler_service import AsyncScheduler
 
+import re
 from uuid import uuid4
 from fastapi import FastAPI, Request, BackgroundTasks
 
@@ -18,11 +19,11 @@ async def recurring_task(request: Request, background_tasks: BackgroundTasks):
     Add a job to the scheduler
     '''
     request = await request.json()
-    print(request)
-    task_name = request['task_name']
+    task_name = " ".join(request['task_name'].strip().split())
+    task_name = re.sub(r'[^a-zA-Z0-9]', '_', task_name)
     image = request['image']
     cron = request['cron']
-    job_name = f'{task_name}-{str(uuid4())[:8]}'
+    job_name = f'{task_name}-[[JOB_ID]]'
     
     background_tasks.add_task(scheduler.schedule_task, task_name, True, cron, docker_service.add_job, job_name, image)
     return {'message': f'Scheduled task: {task_name} successfully at cron: {cron}'}

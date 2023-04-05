@@ -6,7 +6,7 @@ authors = ["Alexander Whipp (awhipp)"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-docker = "^5.0.2"
+docker = "^6.0.1"
 python-dotenv = "^1.0.0"
 fastapi = "^0.95.0"
 uvicorn = "^0.21.1"

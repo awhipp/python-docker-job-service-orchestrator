@@ -1,8 +1,8 @@
 '''
 Flask Application that provides a REST API for the Swarm Orchestrator
 '''
-import uvicorn
 import datetime
+import uvicorn
 
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
@@ -35,37 +35,40 @@ async def index(request: Request):
     '''
     Renders the index page
     '''
-    
-    # get running services
-    services = docker_service.client.services.list()
-    for service in services:
-        service.attrs['CreatedAt'] = service.attrs['CreatedAt'].split('.')[0].replace('T', ' ')
 
-    # get running jobs
-    jobs = docker_service.client.containers.list(all=True)
-    for job in jobs:
-        if '0001-01-01' in job.attrs['State']['StartedAt']:
-            job.runTime = 'Not Started'
-            continue
+    try:
+        # get running services
+        services = docker_service.client.services.list()
+        for service in services:
+            service.attrs['CreatedAt'] = service.attrs['CreatedAt'].split('.')[0].replace('T', ' ')
+
+        # get running jobs
+        jobs = docker_service.client.containers.list(all=True)
+        for job in jobs:
+            if '0001-01-01' in job.attrs['State']['StartedAt']:
+                job.runTime = 'Not Started'
+                continue
+            
+            start_time = datetime.datetime.fromisoformat(job.attrs['State']['StartedAt'].split('.')[0] + '.000000+00:00')
+            end_time = job.attrs['State']['FinishedAt']
+            if '0001-01-01' in end_time:
+                # Endtime is now UTC
+                end_time = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
+            else:
+                end_time = datetime.datetime.fromisoformat(end_time.split('.')[0] + '+00:00')
+            
+            run_time = end_time - start_time
+            job.runTime = run_time
+            job.attrs['State']['StartedAt'] = job.attrs['State']['StartedAt'].split('.')[0].replace('T', ' ')
+
+        # get all images
+        images = docker_service.client.images.list(all=True)
         
-        start_time = datetime.datetime.fromisoformat(job.attrs['State']['StartedAt'].split('.')[0] + '.000000+00:00')
-        end_time = job.attrs['State']['FinishedAt']
-        if '0001-01-01' in end_time:
-            # Endtime is now UTC
-            end_time = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
-        else:
-            end_time = datetime.datetime.fromisoformat(end_time.split('.')[0] + '+00:00')
-        
-        run_time = end_time - start_time
-        job.runTime = run_time
-        job.attrs['State']['StartedAt'] = job.attrs['State']['StartedAt'].split('.')[0].replace('T', ' ')
-
-    # get all images
-    images = docker_service.client.images.list(all=True)
-    
-    # render HTML template with service data
-    return templates.TemplateResponse("services.html", {'request': request, 'services': services, 'jobs': jobs, 'images': images})
-
+        # render HTML template with service data
+        return templates.TemplateResponse("services.html", {'request': request, 'services': services, 'jobs': jobs, 'images': images})
+    except Exception as exc: # pylint: disable=broad-except
+        print(exc)
+        return "Error has occured. Please check the logs for more information."
 
 @app.on_event("shutdown")
 async def app_shutdown():

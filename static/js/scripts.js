@@ -361,3 +361,32 @@ function refresh_logs() {
     });
 }
 
+
+/**
+ * Recurring Jobs
+ */
+
+$("#recurring_job_form").on("submit", function(){
+    replace_fa_icon($("#recurring_job_form button[type='submit']"), "text", "fa-spinner", true);
+
+    var url = '/scheduler/recurring';
+    var data = {
+        'task_name': $("#recurring_task_name").val(),
+        'image': $("#recurring_image").val(),
+        'cron': $("#recurring_cron").val()
+    };
+
+    console.log(data);
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (data) {
+            window.alert(data.message);
+            window.location.reload();
+        }
+    });
+    return false;
+});

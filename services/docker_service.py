@@ -3,6 +3,8 @@ Singleton class for docker service
 '''
 import docker
 
+from uuid import uuid4
+
 class DockerService:
     __instance = None
 
@@ -53,6 +55,9 @@ class DockerService:
         print(
             f"Running job: [{job_name}] from image: [{image}]"
         )
+
+        if '[[JOB_ID]]' in job_name:
+            job_name = job_name.replace('[[JOB_ID]]', str(uuid4())[:8])
 
         self.client.containers.run(image, detach=True, name=job_name)
         return {'message': 'Job started successfully', 'job_name': job_name}
